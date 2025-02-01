@@ -1,0 +1,28 @@
+News_Dataset_Config:
+  Dataset_Path: "datasets/heegyu/news-category-dataset@refs%2Fconvert%2Fparquet/default/train/0000.parquet"
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: "RawNewsCategory"
+  File_Format:
+    - Column_Name: Id
+      Column_Type: Integer
+      Primary_Key: True
+      Source_Exclude: True
+    - Column_Name: link
+      Column_Type: String
+      New_Name: NewsLink
+    - Column_Name: headline
+      Column_Type: String
+      New_Name: NewsHeadline
+    - Column_Name: category
+      Column_Type: String
+      New_Name: NewsCategory
+    - Column_Name: short_description
+      Column_Type: String
+      New_Name: ShortDescription
+    - Column_Name: authors
+      Column_Type: String
+      New_Name: Authors
+    - Column_Name: date
+      Column_Type: Datetime
+      New_Name: NewsDate
