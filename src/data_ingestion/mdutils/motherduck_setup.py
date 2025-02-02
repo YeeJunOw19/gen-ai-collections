@@ -109,7 +109,9 @@ def md_table_setup(
     metadata.create_all(duck_engine, checkfirst=True)
 
 
-def md_read_table(duck_engine: Engine, md_schema: str, md_table: str, keep_columns: list[str]) -> pl.LazyFrame:
+def md_read_table(
+    duck_engine: Engine, md_schema: str, md_table: str, keep_columns: list[str], custom_query: str = None
+) -> pl.LazyFrame:
     """
     This function will query the data into Polars LazyFrame from MotherDuck database.
     It also performs column selection using the column names that user have provided.
@@ -118,10 +120,15 @@ def md_read_table(duck_engine: Engine, md_schema: str, md_table: str, keep_colum
     :param md_schema: MotherDuck schema name
     :param md_table: MotherDuck table name
     :param keep_columns: Columns to select from table in MotherDuck database
+    :param custom_query: User can choose to provide custom query string to query MotherDuck table
     :return: A Polars LazyFrame object from MotherDuck database
     """
 
-    query_string = f'SELECT * FROM "{md_schema}".{md_table}'
+    if custom_query is None:
+        query_string = f'SELECT * FROM "{md_schema}".{md_table}'
+    else:
+        query_string = custom_query
+
     with duck_engine.begin() as conn:
         df = (
             pl.read_database(text(query_string), connection=conn)

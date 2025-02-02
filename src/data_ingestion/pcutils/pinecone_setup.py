@@ -19,17 +19,18 @@ class PineconeInstance:
         self.rebuild_index = rebuild_index
         self.pinecone_engine = Pinecone(api_key=PINECONE_API_KEY)
 
-    def query_pinecone(self, vector_embedding, top_n: int = 5) -> dict:
+    def query_pinecone(self, pinecone_index: Pinecone.Index, vector_embedding, top_n: int = 5) -> dict:
         """
         This function takes in an embedded vector and use that vector to query Pinecone database. The query will return
         the top 5 closes vectors to the embedded vector, by default.
 
+        :param pinecone_index: Pinecone database index
         :param vector_embedding: Embedded vector generated from an text encoder
         :param top_n: Specify the top n results to return. Default is 5
         :return: A dictionary with the results and metadata from Pinecone
         """
         # Query Pinecone database using the vector provided
-        results = self.pinecone_index.query(vector=vector_embedding, top_n=top_n, include_metadata=True)
+        results = pinecone_index.query(vector=vector_embedding, top_k=top_n, include_metadata=True)
         if results["matches"]:
             return results["matches"]
         else:
