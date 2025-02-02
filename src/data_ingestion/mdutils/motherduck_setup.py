@@ -1,6 +1,7 @@
 
 import duckdb
 import os
+import polars as pl
 from duckdb.duckdb import InvalidInputException
 from sqlalchemy import create_engine, MetaData, text, Column, String, Integer, Table, Date
 from sqlalchemy.engine import Engine, make_url
@@ -32,7 +33,6 @@ class MotherDucking:
         # Add read-only mode to database URL if needed
         if self.read_only:
             connection_url = f"{connection_url}&access_mode=read_only"
-            print(connection_url)
 
         # Setup and test Motherduck connection
         try:
@@ -73,7 +73,7 @@ class MotherDucking:
 
 def md_table_setup(
     duck_engine: Engine, schema_name: str, table_name: str,
-    table_schema: list[dict], rebuild_table: bool = False,
+    table_schema: list[dict], column_key: str, rebuild_table: bool = False,
 ) -> None:
     """
     This function sets up the table specified in the parameter of this function. The function will only run a CREATE
@@ -98,7 +98,7 @@ def md_table_setup(
     metadata = MetaData()
     columns = [
         Column(
-            name=schema["Column_Name"],
+            name=schema.get(column_key),
             type_=SQL_ALCHEMY_TYPES.get(schema["Column_Type"], String),
             primary_key=schema.get("Primary_Key", False),
             autoincrement=False
@@ -107,3 +107,26 @@ def md_table_setup(
     ]
     Table(table_name, metadata, *columns, schema=schema_name)
     metadata.create_all(duck_engine, checkfirst=True)
+
+
+def md_read_table(duck_engine: Engine, md_schema: str, md_table: str, keep_columns: list[str]) -> pl.LazyFrame:
+    """
+    This function will query the data into Polars LazyFrame from MotherDuck database.
+    It also performs column selection using the column names that user have provided.
+
+    :param duck_engine: MotherDuck SQLAlchemy connection engine to MotherDuck server
+    :param md_schema: MotherDuck schema name
+    :param md_table: MotherDuck table name
+    :param keep_columns: Columns to select from table in MotherDuck database
+    :return: A Polars LazyFrame object from MotherDuck database
+    """
+
+    query_string = f'SELECT * FROM "{md_schema}".{md_table}'
+    with duck_engine.begin() as conn:
+        df = (
+            pl.read_database(text(query_string), connection=conn)
+            .select(keep_columns)
+            .lazy()
+        )
+
+    return df
