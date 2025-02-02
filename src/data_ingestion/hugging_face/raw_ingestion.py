@@ -12,6 +12,13 @@ POLARS_TYPE = {"String": pl.Utf8, "Integer": pl.Int64, "Datetime": pl.Datetime(t
 
 @asset
 def get_hugging_face_data() -> pl.LazyFrame:
+    """
+    This Dagster asset is used to query Hugging Face data using Polars native API. This asset does not load Hugging Face
+    data into memory, instead it loads a Polars LazyFrame object.
+
+    :return: Polars LazyFrame object of Hugging Face data.
+    """
+
     run_config = CONFIG["News_Dataset_Config"]
 
     # Get the data schema and convert it to Polars schema

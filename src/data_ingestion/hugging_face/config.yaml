@@ -8,6 +8,7 @@ News_Dataset_Config:
       Column_Type: Integer
       Primary_Key: True
       Source_Exclude: True
+      New_Name: Id
     - Column_Name: link
       Column_Type: String
       New_Name: NewsLink
