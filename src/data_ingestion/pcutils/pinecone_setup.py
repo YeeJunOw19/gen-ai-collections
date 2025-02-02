@@ -18,7 +18,6 @@ class PineconeInstance:
         self.metric = metric
         self.rebuild_index = rebuild_index
         self.pinecone_engine = Pinecone(api_key=PINECONE_API_KEY)
-        self.pinecone_index = self._pinecone_setup()
 
     def query_pinecone(self, vector_embedding, top_n: int = 5) -> dict:
         """
@@ -36,7 +35,7 @@ class PineconeInstance:
         else:
             return {}
 
-    def _pinecone_setup(self) -> Pinecone.Index:
+    def pinecone_setup(self) -> Pinecone.Index:
         """
         This function creates a Pinecone index if it doesn't already exist. The user can also specify whether or not
         to rebuild the index. The function will return a Pinecone index if it exists.
@@ -49,13 +48,12 @@ class PineconeInstance:
             if self.index_name in indexes:
                 self.pinecone_engine.delete_index(self.index_name)
 
-        else:
-            if not self.index_name in indexes:
-                self.pinecone_engine.create_index(
-                    name=self.index_name,
-                    dimension=self.dimension,
-                    metric=self.metric,
-                    spec=ServerlessSpec(cloud=self.cloud_provider, region=self.cloud_region)
-                )
+        if self.index_name not in indexes or self.rebuild_index:
+            self.pinecone_engine.create_index(
+                name=self.index_name,
+                dimension=self.dimension,
+                metric=self.metric,
+                spec=ServerlessSpec(cloud=self.cloud_provider, region=self.cloud_region)
+            )
 
         return self.pinecone_engine.Index(name=self.index_name)
