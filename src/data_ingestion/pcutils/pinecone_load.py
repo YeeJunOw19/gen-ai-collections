@@ -1,5 +1,6 @@
 
 from pinecone import Pinecone
+from tqdm import tqdm
 
 class PineconeLoadingBuffer:
 
@@ -7,13 +8,11 @@ class PineconeLoadingBuffer:
         self,
         pc_index: Pinecone.Index,
         embeddings: list[dict],
-        chink_size: int = 1_000,
-        delete_before_load: bool = True
+        chink_size: int = 500
     ):
         self.pc_index = pc_index
         self.embeddings = embeddings
         self.chunk_size = chink_size
-        self.delete_before_load = delete_before_load
         self.loading_embeddings = self._prep_loading_list()
 
     def pinecone_upsert(self) -> None:
@@ -24,12 +23,8 @@ class PineconeLoadingBuffer:
         :return: None
         """
 
-        # Delete all the existing embeddings before loading
-        if self.delete_before_load:
-            self.pc_index.delete(delete_all=True)
-
         # Load embeddings in chunk
-        for i in range(0, len(self.loading_embeddings), self.chunk_size):
+        for i in tqdm(range(0, len(self.loading_embeddings), self.chunk_size), desc="Upserting to Pinecone"):
             batch_data = self.loading_embeddings[i:i + self.chunk_size]
             self.pc_index.upsert(vectors=batch_data)
 
