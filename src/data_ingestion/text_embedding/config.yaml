@@ -1,0 +1,18 @@
+News_Data_Embeddings:
+  Source_Database: mlds-database
+  Source_Schema: gen-ai
+  Source_Table: RawNewsCategory
+  Source_Columns:
+    - Id
+    - NewsHeadline
+    - ShortDescription
+    - NewsDate
+    - NewsCategory
+  Pinecone_Index: "news-index"
+  Model_Dimension: 768
+  Cloud_Provider: aws
+  Cloud_Region: us-east-1
+  Embedding_Model: "sentence-transformers/all-mpnet-base-v2"
+  Embedding_Batch: 1000
+  Cache_File: "news_vectors.pkl"
+  Holdout_Rows: 100
