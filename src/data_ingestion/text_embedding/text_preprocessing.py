@@ -64,7 +64,7 @@ def text_embedding(get_news_data) -> list[dict]:
             temp_dict = {
                 "Id": str(ids[idx]),
                 "vector": embedding,
-                "metadata": {"news_date": news_dates[idx], "news_category": news_categories[idx]}
+                "metadata": {"news_date": str(news_dates[idx].strftime("%Y-%m-%d")), "news_category": str(news_categories[idx])}
             }
             pinecone_data.append(temp_dict)
 
