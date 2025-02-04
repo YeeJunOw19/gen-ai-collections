@@ -55,7 +55,7 @@ def text_embedding(get_news_data) -> list[dict]:
 
     else:
         # Perform text embedding
-        model = SentenceTransformer(model_name_or_path=run_config["Embedding_Model"], device=torch.device("mps"))
+        model = SentenceTransformer(model_name_or_path=run_config["Embedding_Model"], device="mps")
         embeddings = model.encode(text_list, show_progress_bar=True, batch_size=run_config["Embedding_Batch"])
 
         # Generate object and metadata for Pinecone

@@ -4,6 +4,7 @@ import os
 import yaml
 from pathlib import Path
 from dagster import asset
+from datetime import datetime
 
 HUGGING_FACE_API = os.getenv("HUGGING_FACE_API")
 CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))
@@ -45,6 +46,7 @@ def get_hugging_face_data() -> pl.LazyFrame:
         )
         .rename(col_names)
         .with_columns(pl.col("NewsDate").dt.date().alias("NewsDate"))
+        .filter(pl.col("NewsDate") > datetime(2021, 9, 30))
     )
 
     return df
