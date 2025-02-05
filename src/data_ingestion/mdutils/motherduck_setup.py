@@ -110,7 +110,7 @@ def md_table_setup(
 
 
 def md_read_table(
-    duck_engine: Engine, md_schema: str, md_table: str, keep_columns: list[str], custom_query: str = None
+    duck_engine: Engine, md_schema: str, md_table: str, keep_columns: list[str] | None, custom_query: str = None
 ) -> pl.LazyFrame:
     """
     This function will query the data into Polars LazyFrame from MotherDuck database.
@@ -130,10 +130,14 @@ def md_read_table(
         query_string = custom_query
 
     with duck_engine.begin() as conn:
-        df = (
-            pl.read_database(text(query_string), connection=conn)
-            .select(keep_columns)
-            .lazy()
-        )
+        if custom_query is None:
+            df = (
+                pl.read_database(text(query_string), connection=conn)
+                .select(keep_columns)
+                .lazy()
+            )
+
+        else:
+            df = pl.read_database(text(query_string), connection=conn).lazy()
 
     return df
