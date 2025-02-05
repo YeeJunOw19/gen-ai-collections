@@ -8,8 +8,8 @@ PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 class PineconeInstance:
 
     def __init__(
-        self, index_name: str, dimension: int, cloud_provider: str, cloud_region: str,
-        metric: str = "cosine", rebuild_index: bool = False
+        self, index_name: str, dimension: int | None = None, cloud_provider: str | None = None,
+        cloud_region: str | None = None, metric: str = "cosine", rebuild_index: bool = False
     ):
         self.index_name = index_name
         self.dimension = dimension
@@ -36,25 +36,27 @@ class PineconeInstance:
         else:
             return {}
 
-    def pinecone_setup(self) -> Pinecone.Index:
+    def pinecone_setup(self, index_setup: bool = True) -> Pinecone.Index:
         """
         This function creates a Pinecone index if it doesn't already exist. The user can also specify whether or not
         to rebuild the index. The function will return a Pinecone index if it exists.
 
+        :param index_setup: If true, perform steps to set up Pinecone index
         :return: Pinecone index
         """
-        # Get a list of indexes from Pinecone. Delete existing index if specified
-        indexes = self.pinecone_engine.list_indexes().names()
-        if self.rebuild_index:
-            if self.index_name in indexes:
-                self.pinecone_engine.delete_index(self.index_name)
+        if index_setup:
+            # Get a list of indexes from Pinecone. Delete existing index if specified
+            indexes = self.pinecone_engine.list_indexes().names()
+            if self.rebuild_index:
+                if self.index_name in indexes:
+                    self.pinecone_engine.delete_index(self.index_name)
 
-        if self.index_name not in indexes or self.rebuild_index:
-            self.pinecone_engine.create_index(
-                name=self.index_name,
-                dimension=self.dimension,
-                metric=self.metric,
-                spec=ServerlessSpec(cloud=self.cloud_provider, region=self.cloud_region)
-            )
+            if self.index_name not in indexes or self.rebuild_index:
+                self.pinecone_engine.create_index(
+                    name=self.index_name,
+                    dimension=self.dimension,
+                    metric=self.metric,
+                    spec=ServerlessSpec(cloud=self.cloud_provider, region=self.cloud_region)
+                )
 
         return self.pinecone_engine.Index(name=self.index_name)
