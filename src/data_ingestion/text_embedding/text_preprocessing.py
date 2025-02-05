@@ -68,6 +68,9 @@ def text_embedding(get_news_data) -> list[dict]:
             }
             pinecone_data.append(temp_dict)
 
+        if not os.path.exists(DATA_DUMP):
+            os.makedirs(DATA_DUMP)
+
         with open(cached_data, "wb") as file:
             pickle.dump(pinecone_data, file)
 
