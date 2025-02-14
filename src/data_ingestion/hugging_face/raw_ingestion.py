@@ -11,16 +11,13 @@ CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolv
 POLARS_TYPE = {"String": pl.Utf8, "Integer": pl.Int64, "Datetime": pl.Datetime(time_unit="ms")}
 
 
-@asset
-def get_hugging_face_data() -> pl.LazyFrame:
+def _get_hugging_face_data(run_config: dict) -> pl.LazyFrame:
     """
     This Dagster asset is used to query Hugging Face data using Polars native API. This asset does not load Hugging Face
     data into memory, instead it loads a Polars LazyFrame object.
 
     :return: Polars LazyFrame object of Hugging Face data.
     """
-
-    run_config = CONFIG["News_Dataset_Config"]
 
     # Get the data schema and convert it to Polars schema
     table_schema = {}
@@ -36,17 +33,44 @@ def get_hugging_face_data() -> pl.LazyFrame:
 
     # Query data from Hugging Face
     source_url = run_config["Dataset_Path"]
-    df = (
-        pl.scan_parquet(
-            source=f"hf://{source_url}",
-            storage_options={"token": HUGGING_FACE_API},
-            row_index_name="Id",
-            row_index_offset=1,
-            schema=table_schema,
+    if run_config["MotherDuck_Table"] == "RawNewsCategory":
+        df = (
+            pl.scan_parquet(
+                source=f"hf://{source_url}",
+                storage_options={"token": HUGGING_FACE_API},
+                row_index_name="Id",
+                row_index_offset=1,
+                schema=table_schema,
+            )
+            .rename(col_names)
+            .with_columns(pl.col("NewsDate").dt.date().alias("NewsDate"))
+            .filter(pl.col("NewsDate") > datetime(2021, 9, 30))
         )
-        .rename(col_names)
-        .with_columns(pl.col("NewsDate").dt.date().alias("NewsDate"))
-        .filter(pl.col("NewsDate") > datetime(2021, 9, 30))
-    )
+
+    else:
+        df = (
+            pl.scan_parquet(
+                source=f"hf://{source_url}",
+                storage_options={"token": HUGGING_FACE_API},
+                row_index_name="Id",
+                row_index_offset=1,
+                schema=table_schema,
+            )
+            .rename(col_names)
+        )
 
     return df
+
+
+@asset
+def get_news_dataset() -> pl.LazyFrame:
+    # Get configuration and run workflow
+    configs = CONFIG["News_Dataset_Config"]
+    return _get_hugging_face_data(configs)
+
+
+@asset
+def get_qa_dataset() -> pl.LazyFrame:
+    # Get configuration and run workflow
+    configs = CONFIG["GSM8K_Dataset_Config"]
+    return _get_hugging_face_data(configs)

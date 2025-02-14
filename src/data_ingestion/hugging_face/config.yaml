@@ -27,3 +27,25 @@ News_Dataset_Config:
     - Column_Name: date
       Column_Type: Datetime
       New_Name: NewsDate
+
+GSM8K_Dataset_Config:
+  Dataset_Path: "datasets/openai/gsm8k/socratic/train-00000-of-00001.parquet"
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: "RawGSM8KData"
+  File_Format:
+    - Column_Name: Id
+      Column_Type: Integer
+      Primary_Key: True
+      Source_Exclude: True
+      New_Name: Id
+    - Column_Name: question
+      Column_Type: String
+      New_Name: QuestionAsked
+    - Column_Name: answer
+      Column_Type: String
+      New_Name: AnswersGiven
+
+MotherDuck_DML_Scripts:
+  - MotherDuck_Database: "mlds-database"
+    Execution_Scripts: "gsm8k_extractions.sql"
