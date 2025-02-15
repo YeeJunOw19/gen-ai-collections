@@ -9,3 +9,7 @@ Basic_Prompting_Configurations:
   Prompt_Engineering_Method: "Basic Prompting"
   n: 3
   seed: 3825
+  MotherDuck_Dimension_Table: "PE_GSM8KConfigurations"
+  MotherDuck_Dimension_ID: "ModelId"
+  MotherDuck_Fact_Table: "PE_GSM8KResults"
+  MotherDuck_Fact_ID: "Id"
