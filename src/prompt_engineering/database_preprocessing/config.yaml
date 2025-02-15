@@ -1,0 +1,44 @@
+Prompt_Engineering_Preparation:
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Tables:
+    - Table_Name: "PE_GSM8KConfigurations"
+      Table_Schema:
+        - Column_Name: ModelId
+          Column_Type: Integer
+          Primary_Key: True
+        - Column_Name: ModelName
+          Column_Type: String
+          Primary_Key: False
+        - Column_Name: ModelType
+          Column_Type: Float
+          Primary_Key: False
+        - Column_Name: RunStyle
+          Column_Type: String
+          Primary_Key: False
+        - Column_Name: ModelAccuracy
+          Column_Type: Float
+          Primary_Key: False
+        - Column_Name: RunDateTime
+          Column_Type: Datetime
+          Primary_Key: False
+    - Table_Name: "PE_GSM8KResults"
+      Table_Schema:
+        - Column_Name: Id
+          Column_Type: Integer
+          Primary_Key: True
+        - Column_Name: ModelId
+          Column_Type: Integer
+          Primary_Key: False
+        - Column_Name: RowId
+          Column_Type: Integer
+          Primary_Key: False
+        - Column_Name: OpenAIAnswer
+          Column_Type: Float
+          Primary_Key: False
+        - Column_Name: ExtractedAnswer
+          Column_Type: Float
+          Primary_Key: False
+        - Column_Name: IndCorrect
+          Column_Type: Integer
+          Primary_Key: False
