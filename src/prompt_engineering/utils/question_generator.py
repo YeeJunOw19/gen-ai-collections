@@ -16,6 +16,12 @@ class QuestionGenerator:
         self.random_ids = self._random_id_generator()
 
     def _random_id_generator(self) -> list[int]:
+        """
+        Generate a list of random ids within the existing ids in MotherDuck table.
+
+        :return: A list of random ids
+        """
+
         # From MotherDuck get a list of available IDs
         query_string = f'SELECT Id FROM "{self.database_schema}".{self.table_name}'
         ids = (
@@ -35,6 +41,15 @@ class QuestionGenerator:
         return random_ids
 
     def qa_generator(self, answer_schema: str, answer_table: str) -> dict:
+        """
+        Using the list of random ids, get a list of questions and answers corresponding to those ids. Two additional
+        parameters are required to be passed in because class instantiation assume query happens on base table.
+
+        :param answer_schema: Specify the schema of the answer key table in MotherDuck
+        :param answer_table: Specify the table name of the answer key table in MotherDuck
+        :return: A dictionary containing Polars dataframes for questions and answers
+        """
+
         # From MotherDuck, get the questions and answers and save them into a dictionary
         question_string = f'SELECT Id, QuestionAsked FROM "{self.database_schema}".{self.table_name}'
         answer_string = f'SELECT Id, ExtractedAnswer FROM "{answer_schema}".{answer_table}'

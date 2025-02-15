@@ -13,6 +13,13 @@ TABLE_CONFIG = yaml.safe_load(open(SCHEMA_LOCATION, mode="r"))["Prompt_Engineeri
 
 @asset(ins={"df": AssetIn(key="main_basic_scoring")})
 def data_modeling(df: pl.DataFrame):
+    """
+    Dagster asset that performs the actual data modeling work and prepare data to be ingested into MotherDuck.
+
+    :param df: Polars dataframe with scores from basic level prompt engineering
+    :return: A dictionary containing Polars dataframes for dimensional table and fact table
+    """
+
     # Create an instance of MotherDuck
     md = motherduck_setup.MotherDucking(CONFIG["MotherDuck_Database"], True)
 
@@ -39,6 +46,13 @@ def data_modeling(df: pl.DataFrame):
 
 @asset(ins={"dfs": AssetIn(key="data_modeling")})
 def dim_table_load(dfs: dict) -> None:
+    """
+    Dagster asset to load dimension table to MotherDuck
+
+    :param dfs: A dictionary containing Polars dataframes for dimensional table and fact table
+    :return: None
+    """
+
     # Get Dim table schema
     table_schema = TABLE_CONFIG["MotherDuck_Tables"][0]["Table_Schema"]
 
@@ -59,6 +73,13 @@ def dim_table_load(dfs: dict) -> None:
 
 @asset(ins={"dfs": AssetIn(key="data_modeling")})
 def fact_table_load(dfs: dict) -> None:
+    """
+    Dagster asset to load fact table to MotherDuck
+
+    :param dfs: A dictionary containing Polars dataframes for dimensional table and fact table
+    :return: None
+    """
+
     # Get Fact table schema
     table_schema = TABLE_CONFIG["MotherDuck_Tables"][1]["Table_Schema"]
 

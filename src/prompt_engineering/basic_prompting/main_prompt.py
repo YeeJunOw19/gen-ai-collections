@@ -17,6 +17,13 @@ OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
 
 @asset(deps=[st.prompt_engineering_preprocessing])
 async def main_basic_prompting() -> dict:
+    """
+    Dagster asset to asynchronously run basic prompt engineering from OpenAI API. The inputs and results are saved in
+    a dictionary to be used downstream.
+
+    :return: A dictionary containing inputs for downstream assets
+    """
+
     # Get instances of engines required
     md = motherduck_setup.MotherDucking(CONFIG["MotherDuck_Database"], True)
     qg = question_generator.QuestionGenerator(
@@ -51,6 +58,14 @@ async def main_basic_prompting() -> dict:
 
 @asset(ins={"openai_output": AssetIn(key="main_basic_prompting")})
 def main_basic_scoring(openai_output) -> pl.DataFrame:
+    """
+    Dagster asset that takes in the the output from the previous asset, and calculates the scores from basic level
+    prompt engineering.
+
+    :param openai_output: The output dictionary from previous asset
+    :return: A Polars dataframe containing the scores and ready for dim-fact modeling
+    """
+
     # From the results, extract the actual answer from OpenAI response
     client_answers = openai_utils.answer_extractor(openai_output["results"])
 

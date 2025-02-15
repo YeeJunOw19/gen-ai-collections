@@ -9,6 +9,12 @@ CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolv
 
 @asset
 def prompt_engineering_preprocessing() -> None:
+    """
+    Dagster asset for pre-processing, i.e. setting up MotherDuck with the tables required to run prompt engineering.
+
+    :return: None
+    """
+
     # Create an instance of MotherDuck engine
     md = motherduck_setup.MotherDucking(CONFIG["MotherDuck_Database"], False)
     md_schema = CONFIG["MotherDuck_Schema"]
