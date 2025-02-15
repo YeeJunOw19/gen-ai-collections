@@ -3,7 +3,7 @@ import pyarrow as pa
 import polars as pl
 import duckdb
 
-PYARROW_TYPE_CONVERSION = {"String": pa.string(), "Integer": pa.int64()}
+PYARROW_TYPE_CONVERSION = {"String": pa.string(), "Integer": pa.int64(), "Float": pa.float64()}
 
 
 class ArrowTableLoadingBuffer:

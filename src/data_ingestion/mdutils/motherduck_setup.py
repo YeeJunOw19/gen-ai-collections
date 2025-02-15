@@ -3,11 +3,11 @@ import duckdb
 import os
 import polars as pl
 from duckdb.duckdb import InvalidInputException
-from sqlalchemy import create_engine, MetaData, text, Column, String, Integer, Table, Date
+from sqlalchemy import create_engine, MetaData, text, Column, String, Integer, Table, Date, Float
 from sqlalchemy.engine import Engine, make_url
 
 MOTHERDUCK_TOKEN = os.environ.get("MOTHERDUCK_TOKEN")
-SQL_ALCHEMY_TYPES = {"String": String, "Integer": Integer, "Datetime": Date}
+SQL_ALCHEMY_TYPES = {"String": String, "Integer": Integer, "Datetime": Date, "Float": Float}
 
 
 class MotherDucking:
@@ -80,6 +80,7 @@ def md_table_setup(
     script if the table is not already present on the database. Optionally, the function can perform a DROP script
     if specified.
 
+    :param column_key: This parameter indicates the dictionary key that holds the actual column name
     :param duck_engine: SQLAlchemy engine object connected to MotherDuck server
     :param schema_name: Target schema name in the MotherDuck database
     :param table_name: Target table name in the MotherDuck database
