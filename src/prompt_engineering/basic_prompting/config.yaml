@@ -1,0 +1,11 @@
+Basic_Prompting_Configurations:
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: "RawGSM8KData"
+  Answer_Schema: "gen-ai"
+  Answer_Table: "GSM8KAnswers"
+  OpenAI_Model: "gpt-3.5-turbo"
+  OpenAI_Temperature: 0.2
+  Prompt_Engineering_Method: "Basic Prompting"
+  n: 3
+  seed: 3825
