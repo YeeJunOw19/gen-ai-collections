@@ -10,7 +10,7 @@ Prompt_Engineering_Preparation:
         - Column_Name: ModelName
           Column_Type: String
           Primary_Key: False
-        - Column_Name: ModelType
+        - Column_Name: ModelTemperature
           Column_Type: Float
           Primary_Key: False
         - Column_Name: RunStyle
@@ -19,7 +19,7 @@ Prompt_Engineering_Preparation:
         - Column_Name: ModelAccuracy
           Column_Type: Float
           Primary_Key: False
-        - Column_Name: RunDateTime
+        - Column_Name: RunDate
           Column_Type: Datetime
           Primary_Key: False
     - Table_Name: "PE_GSM8KResults"
