@@ -1,7 +1,7 @@
 -- CREATE THE ANSWER KEY TABLE IF IT DOES NOT EXISTS
 CREATE TABLE IF NOT EXISTS "gen-ai".GSM8KAnswers (
   Id INTEGER,
-  ExtractedAnswer INTEGER,
+  ExtractedAnswer DOUBLE,
   PRIMARY KEY(Id)
 );
 
@@ -12,5 +12,5 @@ DELETE FROM "gen-ai".GSM8KAnswers;
 INSERT INTO "gen-ai".GSM8KAnswers (Id, ExtractedAnswer)
 SELECT
     Id,
-    CAST(replace(split_part(AnswersGiven, '####', 2), ',', '') AS INT) AS 'ExtractedAnswer'
+    CAST(replace(split_part(AnswersGiven, '####', 2), ',', '') AS DOUBLE) AS 'ExtractedAnswer'
 FROM "gen-ai".RawGSM8KData;
