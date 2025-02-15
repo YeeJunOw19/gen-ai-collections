@@ -61,7 +61,10 @@ def scoring_function(
     model_name: str, model_temperature: float, run_method: str
 ) -> pl.DataFrame:
     # Create a base dataframe from the results of OpenAI
-    df = pl.DataFrame({"RowId": ids, "OpenAIAnswer": openai_answers})
+    df = pl.DataFrame(
+        data={"RowId": ids, "OpenAIAnswer": openai_answers},
+        schema={"RowId": pl.Int64, "OpenAIAnswer": pl.Float64},
+    )
 
     # Join the scoring dataframe and perform scoring and metadata coding
     df = (
