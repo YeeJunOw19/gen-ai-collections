@@ -3,21 +3,22 @@ import yaml
 import os
 import asyncio
 import logging
+from dagster import asset
 from openai import AsyncOpenAI, OpenAI
 from pathlib import Path
 from src.prompt_engineering.opro_implementation import opro_data_object as to, opro_openai_client
 from src.prompt_engineering.utils import openai_utils
+from src.prompt_engineering.main_workflows import chain_of_thought_prompting
 
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
-PROMPT_CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["OPRO_Meta_Prompts"]
 OPEN_AI_CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["OpenAI_Configurations"]
 OPRO_CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["OPRO_Meta_Prompts"]
 
 
-def _text_formatter(concat_method: str, texts: list[str]) -> str:
+def text_formatter(concat_method: str, texts: list[str]) -> str:
     if concat_method == "Same Line":
         return " ".join(texts)
     else:
@@ -34,6 +35,7 @@ def _list_sorter(list1: list, list2: list) -> tuple:
     return sorted_list1, sorted_list2
 
 
+@asset(deps=[chain_of_thought_prompting.chain_prompting])
 async def opro_training() -> dict:
     # Create an instance of MathQuestion object and pull in all the data needed
     math_data = to.MathQuestionData(seed=OPEN_AI_CONFIG["Training_Seed"], n=OPEN_AI_CONFIG["Training_Samples"])
@@ -52,27 +54,27 @@ async def opro_training() -> dict:
     opro_scores = []
 
     # Initialize all meta prompts and context that will not change throughout the entire run
-    starting_meta = _text_formatter(
+    starting_meta = text_formatter(
         concat_method=OPRO_CONFIG["Starting_Meta_Instruction"]["Concatenation"],
         texts=OPRO_CONFIG["Starting_Meta_Instruction"]["Prompts"],
     )
 
-    problem_meta = _text_formatter(
+    problem_meta = text_formatter(
         concat_method=OPRO_CONFIG["Problem_Statement_Instruction"]["Concatenation"],
         texts=OPRO_CONFIG["Problem_Statement_Instruction"]["Prompts"]
     )
 
-    text_description = _text_formatter(
+    text_description = text_formatter(
         concat_method=OPRO_CONFIG["Examples_Statements"]["Concatenation"],
         texts=OPRO_CONFIG["Examples_Statements"]["Prompts"]
     )
 
-    request_prompt = _text_formatter(
+    request_prompt = text_formatter(
         concat_method=OPRO_CONFIG["Prompt_Generation"]["Concatenation"],
         texts=OPRO_CONFIG["Prompt_Generation"]["Prompts"]
     )
 
-    evaluation_prompt = _text_formatter(
+    evaluation_prompt = text_formatter(
         concat_method=OPRO_CONFIG["Evaluation_Prompt"]["Concatenation"],
         texts=OPRO_CONFIG["Evaluation_Prompt"]["Prompts"]
     )
