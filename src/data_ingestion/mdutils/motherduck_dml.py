@@ -2,7 +2,7 @@
 from pathlib import Path
 import duckdb
 
-SQL_SCRIPTS_LOC = Path(__file__).joinpath("..", "..", "..", "sql_scripts").resolve()
+SQL_SCRIPTS_LOC = Path(__file__).joinpath("..", "..", "..", "external_scripts").resolve()
 
 
 def execute_sql_scripts(duck_conn: duckdb.DuckDBPyConnection, sql_script: str) -> None:
