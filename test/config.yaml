@@ -1,0 +1,4 @@
+Query_Prompt_Engineering_Results:
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: PE_GSM8KConfigurations
