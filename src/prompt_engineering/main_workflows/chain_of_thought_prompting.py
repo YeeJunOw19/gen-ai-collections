@@ -7,14 +7,14 @@ from openai import AsyncOpenAI
 from dagster import asset, AssetIn
 from src.data_ingestion.mdutils import motherduck_setup
 from src.prompt_engineering.utils import question_generator, openai_utils
-from src.prompt_engineering.database_preprocessing import setup_motherduck_tables as st
+from src.prompt_engineering.main_workflows import role_based_prompting
 
 OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
 CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["Chain_Of_Thought_Prompting_Configurations"]
 EXTERNAL_SCRIPTS = Path(__file__).joinpath("..", "..", "..", "external_scripts").resolve()
 
 
-@asset(deps=[st.prompt_engineering_preprocessing])
+@asset(deps=[role_based_prompting.role_prompting])
 async def chain_prompting() -> dict:
     # Get instances of engines required
     md = motherduck_setup.MotherDucking(CONFIG["MotherDuck_Database"], True)

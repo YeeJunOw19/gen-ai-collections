@@ -16,9 +16,10 @@ CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolv
         "basic_results": AssetIn(key="basic_scoring"),
         "role_based_results": AssetIn(key="role_scoring"),
         "chain_based_results": AssetIn(key="chain_scoring"),
+        "opro_results": AssetIn(key="opro_testing"),
     }
 )
-def dim_fact_modeling(basic_results, role_based_results, chain_based_results):
+def dim_fact_modeling(basic_results, role_based_results, chain_based_results, opro_results):
     """
     Dagster asset that performs the actual data modeling work and prepare data to be ingested into MotherDuck.
 
@@ -45,7 +46,7 @@ def dim_fact_modeling(basic_results, role_based_results, chain_based_results):
     )
 
     # Append all the dataframes together into one dataframe
-    all_results = [basic_results, role_based_results, chain_based_results]
+    all_results = [basic_results, role_based_results, chain_based_results, opro_results]
     df = pl.DataFrame()
     for result in all_results:
         df = df.vstack(result["df"])
