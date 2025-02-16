@@ -1,0 +1,11 @@
+Q: Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?
+A: Natalia sold 48 clips to her friends in April. Natalia then sold half of 48 in May, so Natalia sold 48 / 2 = 24. Altogether, Natalia has sold 48 + 24 = 72 clips in April and May. #### 72
+
+Q: James has a rainwater collection barrel. For each inch of rain he collects 15 gallons. On Monday it rained 4 inches and on Tuesday it rained 3 inches. He can sell water for $1.2 per gallon. How much money did he make from selling all the water?
+A: It rained 4 inches on Monday and 3 inches on Tuesday, so it rained 3 + 4 = 7 in total. James collects 15 gallons of rainwater for each inch of rain, so James has collected 7 * 15 = 105 gallons of rainwater. Since he can sell the water for $1.20 per gallon, he made 105 * 1.20 = 126. #### 126
+
+Q: Hans booked a room in a hotel. The hotel has 10 floors with 10 identical rooms on each floor. Because of an accident, the last floor is unavailable for the guests. Considering there are no other guests, in how many different rooms could Hans be checked in?
+A: The hotel has 10 floors with 10 identical rooms on each floor, so the hotel has 10 * 10 = 100 rooms in total. One floor is unavailable which means 1 * 10 = 10 rooms are unavailable. If there are no other guests and 10 rooms are unavailable, Hans can be checked in to 100 - 10 = 90 rooms. #### 90
+
+Q: A boxer weighs 97 kg at 4 months from a fight. He is on a diet that allows him to lose 3 kg per month until the day of the fight. How much will he weigh on the day of the fight?
+A: The boxer will lose 3 kg per month, so in 4 months, he will be losing 3 * 4 = 12 kg. After 4 months on the day of the fight, the boxer weights 97 kg originally, will not be at 97 - 12 = 85 kg. #### 85
