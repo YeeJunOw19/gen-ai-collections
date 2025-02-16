@@ -1,0 +1,7 @@
+Data_Modeling_Configurations:
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Dimension_Table: "PE_GSM8KConfigurations"
+  MotherDuck_Dimension_ID: "ModelId"
+  MotherDuck_Fact_Table: "PE_GSM8KResults"
+  MotherDuck_Fact_ID: "Id"
