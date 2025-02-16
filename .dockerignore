@@ -1,0 +1,12 @@
+.idea
+**/__pycache__
+/data_dump/
+.DS_Store
+/images/
+/readme_docs/
+README.md
+LICENSE
+.gitignore
+/.secrets/
+.git
+.dockerignore
