@@ -1,6 +1,5 @@
 
 import yaml
-import os
 import asyncio
 import logging
 from dagster import asset
@@ -9,11 +8,11 @@ from pathlib import Path
 from src.prompt_engineering.opro_implementation import opro_data_object as to, opro_openai_client
 from src.prompt_engineering.utils import openai_utils
 from src.prompt_engineering.main_workflows import chain_of_thought_prompting
+from src.env_vars import OPEN_AI_KEY
 
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
-OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
 OPEN_AI_CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["OpenAI_Configurations"]
 OPRO_CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["OPRO_Meta_Prompts"]
 

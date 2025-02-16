@@ -1,8 +1,6 @@
 
 from pinecone import Pinecone, ServerlessSpec
-import os
-
-PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
+from src.env_vars import PINECONE_API_KEY
 
 
 class PineconeInstance:

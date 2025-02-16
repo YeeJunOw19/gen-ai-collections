@@ -1,12 +1,11 @@
 
 import duckdb
-import os
 import polars as pl
 from duckdb.duckdb import InvalidInputException
 from sqlalchemy import create_engine, MetaData, text, Column, String, Integer, Table, Date, Float
 from sqlalchemy.engine import Engine, make_url
+from src.env_vars import MOTHERDUCK_TOKEN
 
-MOTHERDUCK_TOKEN = os.environ.get("MOTHERDUCK_TOKEN")
 SQL_ALCHEMY_TYPES = {"String": String, "Integer": Integer, "Datetime": Date, "Float": Float}
 
 

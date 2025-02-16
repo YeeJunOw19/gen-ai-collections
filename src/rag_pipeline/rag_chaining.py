@@ -1,13 +1,11 @@
 
-import os
 from langchain import hub
 from langchain_openai import ChatOpenAI
 from sentence_transformers import CrossEncoder
 from src.rag_pipeline import retriever
 from src.data_ingestion.pcutils import pinecone_setup
 from src.data_ingestion.mdutils import motherduck_setup
-
-OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
+from src.env_vars import OPEN_AI_KEY
 
 
 class RagInstance:

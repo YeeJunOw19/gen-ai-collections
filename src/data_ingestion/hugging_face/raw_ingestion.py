@@ -1,12 +1,11 @@
 
 import polars as pl
-import os
 import yaml
 from pathlib import Path
 from dagster import asset
 from datetime import datetime
+from src.env_vars import HUGGING_FACE_API
 
-HUGGING_FACE_API = os.getenv("HUGGING_FACE_API")
 CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))
 POLARS_TYPE = {"String": pl.Utf8, "Integer": pl.Int64, "Datetime": pl.Datetime(time_unit="ms")}
 

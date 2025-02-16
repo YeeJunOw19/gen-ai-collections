@@ -1,6 +1,5 @@
 
 import yaml
-import os
 import asyncio
 from pathlib import Path
 from openai import AsyncOpenAI
@@ -8,8 +7,8 @@ from dagster import asset, AssetIn
 from src.data_ingestion.mdutils import motherduck_setup
 from src.prompt_engineering.utils import question_generator, openai_utils
 from src.prompt_engineering.main_workflows import role_based_prompting
+from src.env_vars import OPEN_AI_KEY
 
-OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
 CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["Chain_Of_Thought_Prompting_Configurations"]
 EXTERNAL_SCRIPTS = Path(__file__).joinpath("..", "..", "..", "external_scripts").resolve()
 

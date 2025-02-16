@@ -1,5 +1,4 @@
 
-import os
 import yaml
 import asyncio
 import polars as pl
@@ -9,9 +8,9 @@ from pathlib import Path
 from src.prompt_engineering.utils import question_generator, openai_utils
 from src.data_ingestion.mdutils import motherduck_setup
 from src.prompt_engineering.database_preprocessing import setup_motherduck_tables as st
+from src.env_vars import OPEN_AI_KEY
 
 CONFIG = yaml.safe_load(open(Path(__file__).joinpath("..", "config.yaml").resolve(), mode="r"))["Basic_Prompting_Configurations"]
-OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
 
 
 @asset(deps=[st.prompt_engineering_preprocessing])
