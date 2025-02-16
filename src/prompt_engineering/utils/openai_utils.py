@@ -36,7 +36,7 @@ def answer_extractor(answers: list[str]) -> list[int | float]:
     # Replace all non-numerical character with ""
     cleaned_answers = []
     for answer in numerical_answers:
-        x = re.sub(r"[a-zA-Z$%/'=+, ]", "", answer).strip()
+        x = re.sub(r"[a-zA-Z$%/'=+(), ]", "", answer).strip()
         x = re.sub(r"\.$", "", x)
         x = re.sub(r"-$", "", x)
 
@@ -44,11 +44,15 @@ def answer_extractor(answers: list[str]) -> list[int | float]:
         line_split = x.split("\n")
         x = line_split[-1]
 
-        # Convert the string into number
-        if "." in x:
-            number = float(x)
-        else:
-            number = int(x)
+        # Convert the string into numbers
+        try:
+            if "." in x:
+                number = float(x)
+            else:
+                number = int(x)
+
+        except ValueError:
+            number = 0  # OpenAI will return nonsense (20.120-713.313-310.1025), code these to 0
 
         cleaned_answers.append(number)
 
