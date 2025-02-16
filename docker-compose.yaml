@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  genai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yeejunow-twy5319
+    container_name: genai
+    stdin_open: true
+    tty: true
+    environment:
+      PINECONE_API_KEY: /run/secrets/pinecone_key
+      MOTHERDUCK_TOKEN: /run/secrets/motherduck_key
+      HUGGING_FACE_API: /run/secrets/hugging_face_key
+      OPEN_AI_KEY: /run/secrets/openai_key
+    secrets:
+      - pinecone_key
+      - motherduck_key
+      - hugging_face_key
+      - openai_key
+
+secrets:
+  pinecone_key:
+    file: .secrets/pinecone_api_key.txt
+  motherduck_key:
+    file: .secrets/motherduck_api_key.txt
+  hugging_face_key:
+    file: .secrets/hugging_face_api_key.txt
+  openai_key:
+    file: .secrets/openai_api_key.txt
