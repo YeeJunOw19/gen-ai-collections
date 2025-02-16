@@ -7,7 +7,7 @@ Basic_Prompting_Configurations:
   OpenAI_Model: "gpt-3.5-turbo"
   OpenAI_Temperature: 0.2
   Prompt_Engineering_Method: "Basic Prompting"
-  n: 3
+  n: 300
   seed: 3825
   MotherDuck_Dimension_Table: "PE_GSM8KConfigurations"
   MotherDuck_Dimension_ID: "ModelId"
@@ -24,7 +24,7 @@ Role_Based_Prompting_Configurations:
   OpenAI_Temperature: 0.2
   Prompt_Engineering_Method: "Role-based Prompting"
   Context_Template: "role_based_prompt.txt"
-  n: 3
+  n: 300
   seed: 3825
   MotherDuck_Dimension_Table: "PE_GSM8KConfigurations"
   MotherDuck_Dimension_ID: "ModelId"
