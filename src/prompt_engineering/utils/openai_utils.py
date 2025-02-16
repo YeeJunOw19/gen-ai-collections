@@ -7,12 +7,16 @@ import polars as pl
 from datetime import datetime
 
 
-def answer_style_parser(questions: list[str]) -> list[str]:
+def answer_style_parser(questions: list[str], prompt_style: str = "basic") -> list[str]:
     # For each of the questions, add how OpenAI should style its answers
     parsed_questions = []
     for question in questions:
-        temp_str = f'{question} -- Please output only the final numerical number at the end with the prefix ####. For example: ####[ANSWER]'
-        parsed_questions.append(temp_str)
+        if prompt_style == "basic":
+            temp_str = f'{question} -- Please output only the final numerical number at the end with the prefix ####. For example: ####[ANSWER]'
+            parsed_questions.append(temp_str)
+
+        else:
+            parsed_questions.append(question)
 
     return parsed_questions
 
@@ -22,7 +26,7 @@ def answer_extractor(answers: list[str]) -> list[int | float]:
     numerical_answers = []
     for answer in answers:
         try:
-            num_ans = answer.split("####")[1]
+            num_ans = answer.split("####")[-1]
         except IndexError:
             num_ans = answer
 
@@ -32,7 +36,15 @@ def answer_extractor(answers: list[str]) -> list[int | float]:
     # Replace all non-numerical character with ""
     cleaned_answers = []
     for answer in numerical_answers:
-        x = re.sub(r"[a-zA-Z$%, ]", "", answer).strip()
+        x = re.sub(r"[a-zA-Z$%/'=+, ]", "", answer).strip()
+        x = re.sub(r"\.$", "", x)
+        x = re.sub(r"-$", "", x)
+
+        # If there is somehow a line split character from OpenAI, split it and take the last number in the list
+        line_split = x.split("\n")
+        x = line_split[-1]
+
+        # Convert the string into number
         if "." in x:
             number = float(x)
         else:
@@ -44,9 +56,19 @@ def answer_extractor(answers: list[str]) -> list[int | float]:
 
 
 @backoff.on_exception(backoff.expo, openai.RateLimitError)
-async def chat_completion(openai_client, prompt: str, model: str, temperature=float) -> str:
-    # Create the message and send it to OpenAI
+async def chat_completion(
+    openai_client, prompt: str, model: str, temperature: float,
+    prompt_style: str = "basic", role_input: str | None = None
+) -> str:
+    # Create a base prompt message and incrementally add to the list
     messages = [{"role": "user", "content": prompt}]
+
+    # Based on the different prompting strategy, create different messages
+    if prompt_style == "Role-based Prompting":
+        new_addition = {"role": "system", "content": role_input}
+        messages.append(new_addition)
+
+    # Pass in the message into OpenAI API
     response = await openai_client.chat.completions.create(
         model=model,
         messages=messages,
