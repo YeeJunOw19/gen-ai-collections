@@ -11,6 +11,8 @@ OpenAI_Configurations:
   Max_Run: 5
   Training_Seed: 4507
   Training_Samples: 100
+  Testing_Seed: 3825
+  Testing_Samples: 300
 
 OPRO_Meta_Prompts:
   Starting_Meta_Instruction:
