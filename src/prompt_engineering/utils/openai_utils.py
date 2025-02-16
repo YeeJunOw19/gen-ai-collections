@@ -58,7 +58,7 @@ def answer_extractor(answers: list[str]) -> list[int | float]:
 @backoff.on_exception(backoff.expo, openai.RateLimitError)
 async def chat_completion(
     openai_client, prompt: str, model: str, temperature: float,
-    prompt_style: str = "basic", role_input: str | None = None
+    prompt_style: str = "basic", role_input: str | None = None, examples_input: str | None = None,
 ) -> str:
     # Create a base prompt message and incrementally add to the list
     messages = [{"role": "user", "content": prompt}]
@@ -66,6 +66,11 @@ async def chat_completion(
     # Based on the different prompting strategy, create different messages
     if prompt_style == "Role-based Prompting":
         new_addition = {"role": "system", "content": role_input}
+        messages.append(new_addition)
+
+    elif prompt_style == "Chain of Thought Prompting":
+        concat_content = role_input + "\n" + prompt
+        new_addition = {"role": "system", "content": concat_content}
         messages.append(new_addition)
 
     # Pass in the message into OpenAI API
