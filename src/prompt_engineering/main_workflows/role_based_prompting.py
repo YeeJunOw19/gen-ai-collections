@@ -2,7 +2,6 @@
 import yaml
 import os
 import asyncio
-import polars as pl
 from pathlib import Path
 from openai import AsyncOpenAI
 from dagster import asset, AssetIn
