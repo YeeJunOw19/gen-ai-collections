@@ -1,0 +1,72 @@
+MotherDuck_Configurations:
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  Questions_Table: "RawGSM8KData"
+  Answers_Table: "GSM8KAnswers"
+
+OpenAI_Configurations:
+  OpenAI_Model: "gpt-3.5-turbo"
+  OpenAI_Temperature: 0.2
+  Prompt_Engineering_Method: "OPRO"
+  Max_Run: 5
+  Training_Seed: 4507
+  Training_Samples: 100
+
+OPRO_Meta_Prompts:
+  Starting_Meta_Instruction:
+    Concatenation: "Same Line"
+    Prompts:
+      - Your task is to generate the answer starting sentence.
+      - Below are some sentences that have been generated in the past with their corresponding scores.
+      - The score ranges from 0 to 100 with 0 being the lowest score indicating lowest accuracy and 100 being the highest score indicating highest accuracy.
+      - The sentences are arranged in ascending order based on their scores.
+  Problem_Statement_Instruction:
+    Concatenation: "Same Line"
+    Prompts:
+      - The following examples show how to apply your generated sentence.
+      - You will need to replace <INS> in each input with your generated sentence.
+      - Then, read the input and give an output.
+      - We say your output is wrong if your output is different from the given output, and we say your output is correct if they are the same.
+  Examples_Statements:
+    Concatenation: "New Line"
+    Prompts:
+      - "Inputs:"
+      - "Q: Alannah, Beatrix, and Queen are preparing for the new school year and have been given books by their parents. Alannah has 20 more books than Beatrix. Queen has 1/5 times more books than Alannah. If Beatrix has 30 books, how many books do the three have together?"
+      - "A: <INS>"
+      - "Ground truth answer:"
+      - "140"
+      - ""
+      - "Q: There are 15 trees in the grove. Grove workers will plant trees in the grove today. After they are done, there will be 21 trees. How many trees did the grove workers plant today?"
+      - "A: <INS>"
+      - "Ground truth answer:"
+      - "6"
+      - ""
+      - "Q: If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are in the parking lot?"
+      - "A: <INS>"
+      - "Ground truth answer:"
+      - "5"
+      - ""
+      - "Q: A boxer weighs 97 kg at 4 months from a fight. He is on a diet that allows him to lose 3 kg per month until the day of the fight. How much will he weigh on the day of the fight?"
+      - "A: <INS>"
+      - "Ground truth answer:"
+      - "85"
+      - ""
+      - "Q: Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?"
+      - "A: <INS>"
+      - "Ground truth answer:"
+      - "72"
+  Prompt_Generation:
+    Concatenation: "Same Line"
+    Prompts:
+      - Generate 3 starting sentences that are different from all the old ones above and have as high of a score as possible.
+      - The starting sentences should be concise, effective, and generally applicable to all Q&A pairs above.
+      - An example that you can take as a reference is [Calculating the answer, we get].
+      - Write the sentences in square brackets.
+  Evaluation_Prompt:
+    Concatenation: "New Line"
+    Prompts:
+      - You are a high school math teacher and you will be presented with math reasoning questions to solve
+      - You should perform your own reasoning to get to the final answer
+      - "You should add the final output to the end of your response with the prefix ####"
+      - "This is an example that you can take as a reference: The answer to 2 x 2 = 4. #### 4"
+      - You should also start your answer by using the sentence that I have provided below
