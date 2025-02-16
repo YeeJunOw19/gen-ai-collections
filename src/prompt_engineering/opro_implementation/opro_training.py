@@ -5,7 +5,7 @@ import asyncio
 import logging
 from openai import AsyncOpenAI, OpenAI
 from pathlib import Path
-from src.prompt_engineering.opro_implementation import training_data_object as to, opro_openai_client
+from src.prompt_engineering.opro_implementation import opro_data_object as to, opro_openai_client
 from src.prompt_engineering.utils import openai_utils
 
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
