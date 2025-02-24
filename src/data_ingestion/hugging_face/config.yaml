@@ -46,6 +46,45 @@ GSM8K_Dataset_Config:
       Column_Type: String
       New_Name: AnswersGiven
 
+Python_Coding_Dataset_Config:
+  Dataset_Path: "datasets/HydraLM/python-code-instructions-18k-alpaca-standardized/data/train-00000-of-00001-4085f66788911bb6.parquet"
+  MotherDuck_Table: "PythonCodeInstruct"
+  File_Format:
+    - Column_Name: message
+      Column_Type: String
+      New_Name: Message
+    - Column_Name: message_type
+      Column_Type: String
+      New_Name: MessageType
+    - Column_Name: message_id
+      Column_Type: Integer
+      New_Name: MessageId
+    - Column_Name: conversation_id
+      Column_Type: Integer
+      New_Name: QueryId
+
+Python_Dataset_Modeling_Config:
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: "PythonCodeInstruct"
+  File_Format:
+    - Column_Name: Id
+      Column_Type: Integer
+      Primary_Key: True
+      New_Name: Id
+    - Column_Name: QuestionAsked
+      Column_Type: String
+      New_Name: QuestionAsked
+    - Column_Name: QuestionInput
+      Column_Type: String
+      New_Name: QuestionInput
+    - Column_Name: OutputAnswer
+      Column_Type: String
+      New_Name: OutputAnswer
+    - Column_Name: DataSplit
+      Column_Type: String
+      New_Name: DataSplit
+
 MotherDuck_DML_Scripts:
   - MotherDuck_Database: "mlds-database"
     Execution_Scripts: "gsm8k_extractions.sql"

@@ -1,5 +1,6 @@
 
 import polars as pl
+import random
 from dagster import asset, AssetIn
 from src.data_ingestion.hugging_face.raw_ingestion import CONFIG
 from src.data_ingestion.mdutils import motherduck_setup, motherduck_load
@@ -63,6 +64,12 @@ def prep_md_qa_dataset() -> None:
     config = CONFIG["GSM8K_Dataset_Config"]
     _prep_motherduck(config)
 
+@asset
+def prep_python_dataset() -> None:
+    # Set configuration and run code to prep tables in MotherDuck
+    config = CONFIG["Python_Dataset_Modeling_Config"]
+    _prep_motherduck(config)
+
 
 @asset(
     deps=[prep_md_news_dataset],
@@ -81,4 +88,50 @@ def load_news_dataset(df: pl.LazyFrame) -> None:
 def load_qa_dataset(df: pl.LazyFrame) -> None:
     # Set configuration and load data to MotherDuck
     config = CONFIG["GSM8K_Dataset_Config"]
+    _load_data_to_motherduck(df, config)
+
+
+@asset(
+    deps=[prep_python_dataset],
+    ins={"df": AssetIn(key="get_python_dataset")}
+)
+def load_python_dataset(df: pl.LazyFrame) -> None:
+    # Set configuration and load data to MotherDuck
+    config = CONFIG["Python_Dataset_Modeling_Config"]
+
+    # From the dataset, perform data modeling to fit the data into the proper format
+    df = (
+        df
+        .collect()
+        .select("Message", "MessageType", "QueryId")
+        .pivot("MessageType", index="QueryId", values="Message")
+        .with_columns((pl.col("QueryId") + 1).alias("QueryId"))
+    )
+    df.columns = ["Id", "QuestionAsked", "QuestionInput", "OutputAnswer"]
+
+    # Randomly assign different IDs to training, validation, and testing sets
+    ids = df.select("Id").to_series().to_list()
+    random.shuffle(ids)
+
+    n = len(ids)
+    train_end = int(0.8 * n)
+    val_end = train_end + int(0.1 * n)
+
+    train = ids[:train_end]
+    val = ids[train_end:val_end]
+    test = ids[val_end:]
+
+    # Create a new column for data splitting
+    df = (
+        df
+        .with_columns(
+            pl.when(pl.col("Id").is_in(train)).then(pl.lit("Training"))
+            .when(pl.col("Id").is_in(val)).then(pl.lit("Validation"))
+            .otherwise(pl.lit("Testing"))
+            .alias("DataSplit")
+        )
+        .lazy()
+    )
+
+    # Pass the configuration and dataframe to load to MotherDuck
     _load_data_to_motherduck(df, config)

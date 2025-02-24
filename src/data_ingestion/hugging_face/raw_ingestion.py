@@ -73,3 +73,10 @@ def get_qa_dataset() -> pl.LazyFrame:
     # Get configuration and run workflow
     configs = CONFIG["GSM8K_Dataset_Config"]
     return _get_hugging_face_data(configs)
+
+
+@asset
+def get_python_dataset() -> pl.LazyFrame:
+    # Get configuration and run workflow
+    configs = CONFIG["Python_Coding_Dataset_Config"]
+    return _get_hugging_face_data(configs)
