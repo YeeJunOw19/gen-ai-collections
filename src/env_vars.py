@@ -33,3 +33,11 @@ try:
         OPEN_AI_KEY = file.read()
 except FileNotFoundError:
     OPEN_AI_KEY = os.environ.get("OPENAI_API_KEY")
+
+
+# Hugging Face API used for LLama Model
+try:
+    with open(TOP_LEVEL_LOCATION + "hugging_face_llama_model", mode="r") as file:
+        LLAMA_MODEL_API = file.read()
+except FileNotFoundError:
+    LLAMA_MODEL_API = os.environ.get("HUGGING_FACE_API_NU")
