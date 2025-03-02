@@ -1,0 +1,12 @@
+LoRA_Fine_Tuning_Configurations:
+  LLama_Model_Name: "HuggingFaceTB/SmolLM2-360M-Instruct"
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: "PythonCodeInstruct"
+  Seed: 0.3825
+  Top_N: 10
+  Run_Mode: "Training"
+  LoRA_Seed: 3825
+  LoRA_r: 16
+  LoRA_Alpha: 16
+  LoRA_Dropout: 0.05
