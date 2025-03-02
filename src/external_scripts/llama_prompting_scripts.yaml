@@ -1,0 +1,11 @@
+Llama_Instruct_Prompts:
+  System_Prompt:
+    Separator: "New Line"
+    Prompt:
+      - "You are a Python coding expert and a helpful coding tutor."
+      - "Your task is to answer Python coding questions accurately and clearly."
+  User_Prompt:
+    Separator: "Same Line"
+    Prompt:
+      - "Solve this problem using Python coding language."
+
