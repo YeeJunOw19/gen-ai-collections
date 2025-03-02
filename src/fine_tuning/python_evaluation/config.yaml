@@ -1,0 +1,12 @@
+Baseline_Python_Question_Answer:
+  LLama_Model_Name: "HuggingFaceTB/SmolLM2-360M-Instruct"
+  MotherDuck_Database: "mlds-database"
+  MotherDuck_Schema: "gen-ai"
+  MotherDuck_Table: "PythonCodeInstruct"
+  Data_Pick: "test"
+  Seed: 0.3825
+  Top_N: 5
+  Llama_Instruct_Prompt_Script: "llama_prompting_scripts.yaml"
+  Data_Save_Location: "pre_fine_tuning"
+  Save_File: "python_pre_tune.txt"
+  Run_Mode: "Testing"
