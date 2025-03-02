@@ -1,7 +1,9 @@
 
 import torch
 import os
+from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers.tokenization_utils_base import BatchEncoding
 from src.env_vars import LLAMA_MODEL_API
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -49,3 +51,16 @@ class LlamaInstruct:
             outputs = self.model.generate(inputs, **generator_params)
 
         return self.tokenizer.decode(outputs[0])
+
+    def qa_tokenizing(self, training_dataset: Dataset) -> BatchEncoding:
+        # Create a template for the tokenizer
+        q = training_dataset["question"]
+        a = training_dataset["answer"]
+        template = (
+            f"""<|im_start|>system\nYou are a Python coding expert and a helpful coding tutor.\nYour task is to answer Python coding questions accurately and clearly.<|im_end|>
+            \n<|im_start|>user\nSolve this problem using Python coding language.\n{q} <|im_end|>
+            \n<|im_start|>assistant\n{a}<|im_end|>
+            """
+        )
+
+        return self.tokenizer(template, truncation=True, padding="max_length", max_length=2048)
