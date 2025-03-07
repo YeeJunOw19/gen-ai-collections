@@ -4,9 +4,11 @@ LoRA_Fine_Tuning_Configurations:
   MotherDuck_Schema: "gen-ai"
   MotherDuck_Table: "PythonCodeInstruct"
   Seed: 0.3825
-  Top_N: 10
+  Top_N: 3000
   Run_Mode: "Training"
   LoRA_Seed: 3825
   LoRA_r: 16
   LoRA_Alpha: 16
   LoRA_Dropout: 0.05
+  LoRA_Model_Save: "fine_tuned_models"
+  LoRA_Model_Name: "SmolLM2-360M-Instruct-Python"
