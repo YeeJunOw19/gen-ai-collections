@@ -41,7 +41,8 @@ def lora_main() -> None:
     llama.print_trainable_parameters()
     llama.model_fine_tuning(
         seed=CONFIG["LoRA_Seed"], training_data=tuning_data,
-        folder_name=CONFIG["LoRA_Model_Save"], model_name=CONFIG["LoRA_Model_Name"]
+        folder_name=CONFIG["LoRA_Model_Save"], model_name=CONFIG["LoRA_Model_Name"],
+        warmup_steps=CONFIG["LoRA_WarmupSteps"], max_steps=CONFIG["LoRA_Max_Steps"]
     )
 
 
