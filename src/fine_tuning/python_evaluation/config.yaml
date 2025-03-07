@@ -9,3 +9,10 @@ Baseline_Python_Question_Answer:
   Data_Save_Location: "pre_fine_tuning"
   Save_File: "python_pre_tune.txt"
   Run_Mode: "Testing"
+
+Fine_Tuned_Python_Question_Answer:
+  LLama_Model_Name: "SmolLM2-360M-Instruct-Python"
+  Llama_Instruct_Prompt_Script: "llama_prompting_scripts.yaml"
+  Data_Save_Location: "post_fine_tuning"
+  Save_File: "python_post_tune.txt"
+  Run_Mode: "Testing"

@@ -20,41 +20,42 @@ def _concurrent_qa(system_prompt: str, answer_prompt: str, model_name: str) -> s
     return answer
 
 
-def evaluation_run(run_key: str) -> list[str]:
+def evaluation_run(run_key: str, question_lists: list | None = None, mode: str = "remote") -> list[str]:
     config = CONFIG[run_key]
 
     # Get the save file location and make sure that the folder exists. If not, create one
     SAVE_LOC = DATA_LOCATION.joinpath(config["Data_Save_Location"]).resolve()
     os.makedirs(SAVE_LOC, exist_ok=True)
 
-    # Set up MotherDuck instance and query a list of questions from MotherDuck
-    md = motherduck_setup.MotherDucking(config["MotherDuck_Database"], True)
-    schema_name = config["MotherDuck_Schema"]
-    table_name = config["MotherDuck_Table"]
-    md_seed = config["Seed"]
-    top_n = config["Top_N"]
-    run_mode = config["Run_Mode"]
+    if not question_lists:
+        # Set up MotherDuck instance and query a list of questions from MotherDuck
+        md = motherduck_setup.MotherDucking(config["MotherDuck_Database"], True)
+        schema_name = config["MotherDuck_Schema"]
+        table_name = config["MotherDuck_Table"]
+        md_seed = config["Seed"]
+        top_n = config["Top_N"]
+        run_mode = config["Run_Mode"]
 
-    query_string = (
-        f"""
-        SELECT setseed({md_seed});
-        SELECT * 
-        FROM "{schema_name}".{table_name} 
-        WHERE DataSplit = '{run_mode}' AND QuestionInput = ''
-        ORDER BY RANDOM() 
-        LIMIT {top_n};
-        """
-    )
-    question_lists = (
-        motherduck_setup.md_read_table(
-            duck_engine=md.duckdb_engine, md_schema=schema_name, md_table=table_name,
-            keep_columns=None, custom_query=query_string
+        query_string = (
+            f"""
+            SELECT setseed({md_seed});
+            SELECT * 
+            FROM "{schema_name}".{table_name} 
+            WHERE DataSplit = '{run_mode}' AND QuestionInput = ''
+            ORDER BY RANDOM() 
+            LIMIT {top_n};
+            """
         )
-        .select("QuestionAsked")
-        .collect()
-        .to_series()
-        .to_list()
-    )
+        question_lists = (
+            motherduck_setup.md_read_table(
+                duck_engine=md.duckdb_engine, md_schema=schema_name, md_table=table_name,
+                keep_columns=None, custom_query=query_string
+            )
+            .select("QuestionAsked")
+            .collect()
+            .to_series()
+            .to_list()
+        )
 
     # Create the system prompt and user prompts from the list above
     prompt_config = yaml.safe_load(open(PROMPT_LOCATION.joinpath(config["Llama_Instruct_Prompt_Script"]).resolve(), mode="r"))["Llama_Instruct_Prompts"]
@@ -70,7 +71,15 @@ def evaluation_run(run_key: str) -> list[str]:
     # Create parameters for concurrency
     prompt_questions = [user_prompt + "\n" + question for question in question_lists]
     system_lists = [system_prompt] * len(prompt_questions)
-    model_names = [config["LLama_Model_Name"]] * len(prompt_questions)
+
+    # Get the model from either remote repository or local repository
+    if mode == "remote":
+        model_names = [config["LLama_Model_Name"]] * len(prompt_questions)
+
+    else:
+        model_repo = Path(__file__).joinpath("..", "..", "..", "..", "data_dump", "fine_tuned_models").resolve()
+        model_path = model_repo.joinpath(config["LLama_Model_Name"]).resolve().__str__()
+        model_names = [model_path] * len(prompt_questions)
 
     with ThreadPool(processes=3) as pool:
         args = list(zip(system_lists, prompt_questions, model_names))
