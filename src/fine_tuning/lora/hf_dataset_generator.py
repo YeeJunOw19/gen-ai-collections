@@ -1,33 +1,15 @@
 
 import yaml
+import polars as pl
 from pathlib import Path
 from datasets import Dataset
-from src.data_ingestion.mdutils import motherduck_setup
 from src.fine_tuning.llama_object import llama_instruct
 
 YAML_FILE = Path(__file__).joinpath("..", "config.yaml").resolve()
 CONFIG = yaml.safe_load(open(YAML_FILE, mode="r"))["LoRA_Fine_Tuning_Configurations"]
 
 
-def generate_training_data() -> Dataset:
-    # Set up MotherDuck and get data
-    md = motherduck_setup.MotherDucking(CONFIG["MotherDuck_Database"], True)
-
-    sql_string = (
-        f"""
-        SELECT setseed({CONFIG["Seed"]});
-        SELECT * 
-        FROM "{CONFIG["MotherDuck_Schema"]}".{CONFIG["MotherDuck_Table"]} 
-        WHERE DataSplit = '{CONFIG["Run_Mode"]}' AND QuestionInput = ''
-        ORDER BY RANDOM() 
-        LIMIT {CONFIG["Top_N"]};
-        """
-    )
-    df = motherduck_setup.md_read_table(
-        duck_engine=md.duckdb_engine, md_schema=CONFIG["MotherDuck_Schema"], md_table=CONFIG["MotherDuck_Table"],
-        keep_columns=None, custom_query=sql_string
-    ).collect()
-
+def generate_hf_data(df: pl.DataFrame) -> Dataset:
     # Create a Hugging Face dataset of questions and answers
     qa_dict = {
         "question": df.select("QuestionAsked").to_series().to_list(),
