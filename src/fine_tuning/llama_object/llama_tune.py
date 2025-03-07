@@ -79,7 +79,10 @@ class LlamaTune(llama_instruct.LlamaInstruct):
 
         print(f"Trainable params: {trainable_params} || All params: {all_param} || Trainable%: {100 * trainable_params / all_param}")
 
-    def model_fine_tuning(self, seed: int, training_data: Dataset, folder_name: str, model_name: str) -> None:
+    def model_fine_tuning(
+        self, seed: int, training_data: Dataset, folder_name: str, model_name: str,
+        warmup_steps: int, max_steps: int
+    ) -> None:
         # Create folder if not exists
         output_folder = DATA_LOCATION.joinpath(folder_name).resolve()
         os.makedirs(output_folder, exist_ok=True)
@@ -95,7 +98,7 @@ class LlamaTune(llama_instruct.LlamaInstruct):
             model=self.peft_model, train_dataset=training_data,
             args=TrainingArguments(
                 per_device_train_batch_size=4, gradient_accumulation_steps=4,
-                warmup_steps=100, max_steps=1000, learning_rate=1e-3, fp16=self.fp16_param,
+                warmup_steps=warmup_steps, max_steps=max_steps, learning_rate=1e-3, fp16=self.fp16_param,
                 logging_steps=1, output_dir="outputs", weight_decay=0.01
             ),
             data_collator=DataCollatorForLanguageModeling(self.tokenizer, mlm=False)
