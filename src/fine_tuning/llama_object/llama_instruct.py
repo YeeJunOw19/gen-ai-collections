@@ -22,7 +22,6 @@ class LlamaInstruct:
             AutoModelForCausalLM
             .from_pretrained(model_name, trust_remote_code=True, token=LLAMA_MODEL_API)
             .to(self.device_name)
-            .eval()
         )
 
     @staticmethod
@@ -48,7 +47,7 @@ class LlamaInstruct:
             "pad_token_id": self.tokenizer.eos_token_id, "eos_token_id": self.tokenizer.eos_token_id
         }
         with torch.no_grad():
-            outputs = self.model.generate(inputs, **generator_params)
+            outputs = self.model.eval().generate(inputs, **generator_params)
 
         return self.tokenizer.decode(outputs[0])
 
