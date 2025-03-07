@@ -4,6 +4,7 @@ import torch.nn as nn
 import random
 import numpy as np
 import os
+import shutil
 from datasets import Dataset
 from pathlib import Path
 from peft import LoraConfig, get_peft_model, PeftModel
@@ -22,6 +23,7 @@ class LlamaTune(llama_instruct.LlamaInstruct):
         self.alpha = alpha
         self.dropout = dropout
         self.peft_model = self._lora_configurations(self.model, self.r, self.alpha, self.dropout)
+        self.fp16_param = True if self.device_name == "cuda" else False
 
     @staticmethod
     def _set_device_seed(seed: int) -> None:
@@ -93,16 +95,16 @@ class LlamaTune(llama_instruct.LlamaInstruct):
             model=self.peft_model, train_dataset=training_data,
             args=TrainingArguments(
                 per_device_train_batch_size=4, gradient_accumulation_steps=4,
-                warmup_steps=100, max_steps=2000, learning_rate=1e-4, fp16=True,
-                logging_steps=100, output_dir="outputs"
+                warmup_steps=100, max_steps=1000, learning_rate=1e-3, fp16=self.fp16_param,
+                logging_steps=1, output_dir="outputs", weight_decay=0.01
             ),
             data_collator=DataCollatorForLanguageModeling(self.tokenizer, mlm=False)
         )
-        trainer.args._n_gpu = 1
         self.peft_model.config.use_cache = False
 
         # Run the training model and save the final model
-        model_path = output_folder.joinpath(model_name).resolve().__str__()
+        model_path = output_folder.joinpath(model_name).resolve()
+        shutil.rmtree(model_path, ignore_errors=True)
         trainer.train()
-        self.peft_model.save_pretrained(model_path)
-        self.tokenizer.save_pretrained(model_path)
+        self.peft_model.save_pretrained(model_path.__str__())
+        self.tokenizer.save_pretrained(model_path.__str__())
