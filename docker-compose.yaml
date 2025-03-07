@@ -19,6 +19,13 @@ services:
       - motherduck_key
       - hugging_face_key
       - openai_key
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
 
 secrets:
   pinecone_key:
