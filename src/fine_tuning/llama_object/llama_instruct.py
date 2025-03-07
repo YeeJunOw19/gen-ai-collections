@@ -44,7 +44,7 @@ class LlamaInstruct:
 
         # Set the parameters of the model and generate the response
         generator_params = {
-            "max_new_tokens": 3000, "temperature": 0.1, "top_p": 0.9, "do_sample": True,
+            "max_new_tokens": 200, "temperature": 0.1, "top_p": 0.9, "do_sample": True,
             "pad_token_id": self.tokenizer.eos_token_id, "eos_token_id": self.tokenizer.eos_token_id
         }
         with torch.no_grad():

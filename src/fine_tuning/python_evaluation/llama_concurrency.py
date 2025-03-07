@@ -41,7 +41,7 @@ def evaluation_run(run_key: str, question_lists: list | None = None, mode: str =
             SELECT setseed({md_seed});
             SELECT * 
             FROM "{schema_name}".{table_name} 
-            WHERE DataSplit = '{run_mode}' AND QuestionInput = ''
+            WHERE DataSplit = '{run_mode}' AND QuestionInput = '' AND Id IN (67, 92, 181, 516, 7708)
             ORDER BY RANDOM() 
             LIMIT {top_n};
             """
@@ -81,7 +81,7 @@ def evaluation_run(run_key: str, question_lists: list | None = None, mode: str =
         model_path = model_repo.joinpath(config["LLama_Model_Name"]).resolve().__str__()
         model_names = [model_path] * len(prompt_questions)
 
-    with ThreadPool(processes=3) as pool:
+    with ThreadPool(processes=1) as pool:
         args = list(zip(system_lists, prompt_questions, model_names))
         results = pool.starmap(_concurrent_qa, args)
 

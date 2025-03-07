@@ -9,11 +9,10 @@ def main_pre_tuned() -> None:
     qa = llama_concurrency.evaluation_run(config_key)
 
     # Print out two results randomly
-    random_qa = random.choice(qa)
-    for idx, value in enumerate(random_qa):
+    for idx in range(0, 2):
         print(f"{idx}: The Python question and answer can is as below.\n")
         print(f"**************")
-        print(f"{value}\n")
+        print(f"{qa[idx]}\n")
 
 
 if __name__ == "__main__":
