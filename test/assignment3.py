@@ -17,9 +17,11 @@ USER_PROMPT = (
 )
 
 
-def pre_fine_tune() -> None:
+def question_answer_python(mode: str) -> None:
+    local_model = Path(__file__).joinpath("..", "data", "SmolLM2-360M-Instruct-Python").resolve().__str__()
+
     # Create an object of the LLM model
-    llama = llama_instruct.LlamaInstruct(REMOTE_MODEL)
+    llama = llama_instruct.LlamaInstruct(REMOTE_MODEL if mode == "Pre-tune" else local_model)
 
     # Run the prompt through the model for testing
     prompt_output = llama.llama_answering(SYSTEM_PROMPT, USER_PROMPT)
@@ -49,5 +51,6 @@ def model_fine_tune() -> None:
 
 
 if __name__ == "__main__":
-    pre_fine_tune()
+    question_answer_python("Pre-tune")
     model_fine_tune()
+    question_answer_python("Fine-tuned")
