@@ -8,4 +8,3 @@ Llama_Instruct_Prompts:
     Separator: "Same Line"
     Prompt:
       - "Solve this problem using Python coding language."
-

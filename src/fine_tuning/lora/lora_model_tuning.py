@@ -15,13 +15,13 @@ def lora_main() -> None:
 
     sql_string = (
         f"""
-            SELECT setseed({CONFIG["Seed"]});
-            SELECT *
-            FROM "{CONFIG["MotherDuck_Schema"]}".{CONFIG["MotherDuck_Table"]}
-            WHERE DataSplit = '{CONFIG["Run_Mode"]}' AND QuestionInput = ''
-            ORDER BY RANDOM()
-            LIMIT {CONFIG["Top_N"]};
-            """
+        SELECT setseed({CONFIG["Seed"]});
+        SELECT *
+        FROM "{CONFIG["MotherDuck_Schema"]}".{CONFIG["MotherDuck_Table"]}
+        WHERE DataSplit = '{CONFIG["Run_Mode"]}' AND QuestionInput = ''
+        ORDER BY RANDOM()
+        LIMIT {CONFIG["Top_N"]};
+        """
     )
     df = motherduck_setup.md_read_table(
         duck_engine=md.duckdb_engine, md_schema=CONFIG["MotherDuck_Schema"], md_table=CONFIG["MotherDuck_Table"],
