@@ -43,7 +43,7 @@ def model_fine_tune() -> None:
     print("Staring Fine Tuning...")
     llama.model_fine_tuning(
         seed=0, training_data=df_tuning, folder_name="models", model_name="SmolLM2-360M-Instruct-Python",
-        warmup_steps=10, max_steps=100, output_folder=output_folder
+        warmup_steps=1, max_steps=20, output_folder=output_folder
     )
     print("Completed Fine Tuning...")
 
