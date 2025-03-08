@@ -42,7 +42,15 @@ cd assignment-3-YeeJunOw19
 Copy the `.secrets` folder into `assignment-3-YeeJunOw19`. You should have 5 files containing different API keys for different
 cloud provider and services.
 
-*Step 3*:</br>
+*Step3*:</br>
+From the Google Shared Drive, there will be a folder called `unit_test_data`. Run the code below to create a folder called `data`
+in the `test` folder. Then download the parquet file and paste the data inside the `data` folder that you have just created.
+
+```shell
+mkdir ./test/data
+```
+
+*Step 4*:</br>
 Create a Docker container from the pre-built image using Docker Compose.
 ```shell
 docker compose run --rm genai
