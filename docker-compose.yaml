@@ -14,11 +14,13 @@ services:
       MOTHERDUCK_TOKEN: /run/secrets/motherduck_key
       HUGGING_FACE_API: /run/secrets/hugging_face_key
       OPEN_AI_KEY: /run/secrets/openai_key
+      LLAMA_MODEL_API: /run/secrets/llama_model_key
     secrets:
       - pinecone_key
       - motherduck_key
       - hugging_face_key
       - openai_key
+      - llama_model_key
     deploy:
       resources:
         reservations:
@@ -36,3 +38,5 @@ secrets:
     file: .secrets/hugging_face_api_key.txt
   openai_key:
     file: .secrets/openai_api_key.txt
+  llama_model_key:
+    file: .secrets/llama_model_api_key.txt
