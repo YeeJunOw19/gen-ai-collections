@@ -10,6 +10,13 @@ and 10% for testing, although the 10% validation set is not used in this exercis
 
 Dataset: https://huggingface.co/datasets/HydraLM/python-code-instructions-18k-alpaca-standardized
 
+> [!NOTE]
+> Image Location: DeepDish4
+> On previous assignment that was a comment about removing modules that are not used in this assignment. But, because this repository
+> is a monolithic repository with many dependencies and functionalities intertwined, I cannot simply remove modules that are not being used.
+> Furthermore, Dagster orchestration is a tightly integrated orchestration tool and removing any part of this project will break the system.
+> I hope this make sense!
+
 ---
 
 ### Prerequisite
@@ -29,7 +36,7 @@ a folder called .secrets in my workspace in DeepDish, within the `assignment-2-Y
 ### Quick Start
 
 To be able to run the fill fine-tuning process, as well as running the small unit test, please follow the instruction below
-to set up the workspace. The image will be built in **DeepDish 3**.
+to set up the workspace. The image will be built in **DeepDish 4**.
 
 *Step 1*:</br>
 Clone the remote repository into your local machine.
@@ -312,3 +319,24 @@ def
 The biggest difference here is that the model now is using the maximum token parameter to generate as long of an answer as 
 possible. The maximum token in both runs are set to about 300 but somehow, after the fine-tuning process, it trys to generate
 as long of an answer as possible, until it is being cutoff at the 300 token mark.
+
+---
+
+### CUDA Out of Memory
+
+I tried running my Docker container using the instructions provided above in DeepDish4, but it seems like everyone is using DD4
+and is causing "CUDA Out of Memory" issue. I am able to run the unit test on the inference steps but it comes to fine-tuning steps,
+CUDA basically ran out of memory.
+
+I have my own EC2 instance in AWS and I ran the same steps from above without any issue. I am assuming that GPUs in DD4 are
+overloaded. Here are the specs that I am using in the EC2 instance.
+
+![EC2 Specs](/images/Assignment3_EC2_Specs.png)
+
+_DeepDish4 Log_:
+
+![DD4 Error Log](/images/Assignment3_DD4_Error.png)
+
+_EC2 Log_:
+
+![AWS Log](/images/Assignment3_AWS_Log.png)
