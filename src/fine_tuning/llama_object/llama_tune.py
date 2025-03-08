@@ -81,11 +81,12 @@ class LlamaTune(llama_instruct.LlamaInstruct):
 
     def model_fine_tuning(
         self, seed: int, training_data: Dataset, folder_name: str, model_name: str,
-        warmup_steps: int, max_steps: int
+        warmup_steps: int, max_steps: int, output_folder: Path | None = None
     ) -> None:
         # Create folder if not exists
-        output_folder = DATA_LOCATION.joinpath(folder_name).resolve()
-        os.makedirs(output_folder, exist_ok=True)
+        if not output_folder:
+            output_folder = DATA_LOCATION.joinpath(folder_name).resolve()
+            os.makedirs(output_folder, exist_ok=True)
 
         # Set seed to make sure reproducibility
         random.seed(seed)
