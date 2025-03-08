@@ -1,4 +1,5 @@
 
+import os
 from pathlib import Path
 from src.data_ingestion.mdutils import motherduck_setup
 
@@ -27,6 +28,7 @@ def _get_training_data() -> None:
 
     # Query the data from MotherDuck and save a copy of them locally
     cache_location = Path(__file__).joinpath("..", "..", "data", CACHED_DATA).resolve()
+    os.makedirs(cache_location.parent, exist_ok=True)
     df = motherduck_setup.md_read_table(
         duck_engine=md.duckdb_engine, md_schema=MOTHERDUCK_SCHEMA, md_table=MOTHERDUCK_TABLE,
         keep_columns=None, custom_query=sql_string
