@@ -54,6 +54,7 @@ Llama_Code_Quality_Prompt:
       - "Give your response in the form of 'yes', 'no', or 'needs improvement'."
       - "'yes' means the the code is ready for production, 'no' means that the code is not ready for production, and 'needs improvement' means that the code works but has issues that should be addressed before deployment."
       - "If the code **needs improvement** or **is not production-ready**, provide a brief explanation of the issues and suggest actionable improvements to the code."
+      - "If the code is incomplete or is completely irrelevant, mention that the model failed to generate what is needed."
   User_Prompt:
     Separator: "New Line"
     Prompt:
