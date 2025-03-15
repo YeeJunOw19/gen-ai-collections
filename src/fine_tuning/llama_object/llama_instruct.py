@@ -33,10 +33,9 @@ class LlamaInstruct:
         else:
             return "cpu"
 
-    def llama_answering(self, system_prompt: str, user_prompt: str) -> str:
+    def llama_answering(self, system_prompt: str, user_prompt: str, max_new_token: int = 500) -> str:
         # Create message to be passed to the model
         message = [{"role": "system", "content": system_prompt},{"role": "user", "content": user_prompt}]
-        print(message)
 
         # Generate input token for the message
         input_text = self.tokenizer.apply_chat_template(message, tokenize=False)
@@ -44,7 +43,7 @@ class LlamaInstruct:
 
         # Set the parameters of the model and generate the response
         generator_params = {
-            "max_new_tokens": 300, "temperature": 0.1, "top_p": 0.9, "do_sample": True,
+            "max_new_tokens": max_new_token, "temperature": 0.1, "top_p": 0.9, "do_sample": True,
             "pad_token_id": self.tokenizer.eos_token_id, "eos_token_id": self.tokenizer.eos_token_id
         }
         with torch.no_grad():
