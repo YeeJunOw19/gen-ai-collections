@@ -28,6 +28,8 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+    ports:
+      - "8501:8501"
 
 secrets:
   pinecone_key:
