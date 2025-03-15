@@ -1,6 +1,8 @@
 .idea
 **/__pycache__
-/data_dump/
+/data_dump/post_fine_tuning/
+/data_dump/pre_fine_tuning/
+/data_dump/news_vectors.pkl
 .DS_Store
 /images/
 /readme_docs/
