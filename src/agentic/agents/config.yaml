@@ -1,0 +1,11 @@
+Competitors_Configurations:
+  Prompts_Script: "llama_prompting_scripts.yaml"
+  Extraction_Model: "gpt-3.5-turbo"
+  Answer_Grader_Model: "gpt-3.5-turbo"
+  Answer_Quality_Model: "gpt-3.5-turbo"
+  Competitor1:
+    Model_Name: "meta-llama/Llama-3.2-1B-Instruct"
+    Remote_Model: True
+  Competitor2:
+    Model_Name: "SmolLM2-360M-Instruct-Python"
+    Remote_Model: False
