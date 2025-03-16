@@ -14,6 +14,6 @@ RUN pip cache purge
 
 COPY . .
 
-EXPOSE 8501
+EXPOSE 3825
 
 CMD ["/bin/bash"]

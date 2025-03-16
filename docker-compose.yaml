@@ -29,7 +29,7 @@ services:
               count: all
               capabilities: [gpu]
     ports:
-      - "8501:8501"
+      - "3825:3825"
 
 secrets:
   pinecone_key:
