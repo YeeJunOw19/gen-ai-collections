@@ -6,7 +6,7 @@ from src.agentic.agentic_workflow import python_qa_quality
 st.set_page_config(page_title="Python Code Evaluation", page_icon=":robot_face:", layout="wide")
 
 # Setup run configuration for LangGraph
-RECURSION_LIMIT = 10
+RECURSION_LIMIT = 50
 
 
 # --------------------------------------------------------------------------------------------------------------------
