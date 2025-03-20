@@ -1,0 +1,8 @@
+Python_Question_Answer_Embedding:
+  MotherDuck_Database: "mlds-database"
+  Embedding_Model: "sentence-transformers/all-mpnet-base-v2"
+  Embedding_Batch: 200
+  Pinecone_Index: "python-index"
+  Model_Dimension: 768
+  Cloud_Provider: aws
+  Cloud_Region: us-east-1
