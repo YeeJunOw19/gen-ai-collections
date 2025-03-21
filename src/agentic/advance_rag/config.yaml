@@ -1,0 +1,6 @@
+Advanced_Agentic_Configurations:
+  MotherDuck_Database: "mlds-database"
+  Embedding_Model: "sentence-transformers/all-mpnet-base-v2"
+  Reranker_Model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  Pinecone_Index: "python-index"
+  Top_N: 5
