@@ -9,3 +9,6 @@ Competitors_Configurations:
   Competitor2:
     Model_Name: "SmolLM2-360M-Instruct-Python"
     Remote_Model: False
+  Base_Model:
+    Model_Name: "HuggingFaceTB/SmolLM2-360M-Instruct"
+    Remote_Model: True
